@@ -2,15 +2,14 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setCredentials } from "./authSlice";
-import { useLoginMutation } from "../../app/services/auth";
+import { auth } from "../../base";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 const AdminLogin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [pwd, setPwd] = useState("");
-
-  const [login, { isLoading }] = useLoginMutation();
 
   return (
     <>
@@ -30,17 +29,27 @@ const AdminLogin = () => {
       />
       <button
         onClick={async () => {
-          const user = await login({
-            username,
-            password: pwd,
-          }).unwrap();
-          dispatch(setCredentials(user));
-          navigate("/admin");
+          console.log("making request");
+          const auth = getAuth();
+          signInWithEmailAndPassword(auth, username, pwd)
+            .then((userCredential) => {
+              // Signed in
+              const user = userCredential.user;
+              dispatch(
+                setCredentials({ user: user.uid, token: user.accessToken })
+              );
+              navigate("/admin");
+            })
+            .catch((error) => {
+              const errorCode = error.code;
+              const errorMessage = error.message;
+              console.error("Login failed with errorCode: ", errorCode);
+              console.error("Login failed with errorMessage: ", errorMessage);
+            });
         }}
       >
         Submit
       </button>
-      {isLoading ? <span>LOADING</span> : null}
     </>
   );
 };
