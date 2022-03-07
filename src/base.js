@@ -1,5 +1,7 @@
-import { initializeApp } from "firebase/app";
-import "firebase/storage";
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getStorage } from 'firebase/storage';
+import { getDatabase } from 'firebase/database';
 
 export const app = initializeApp({
   // projectId: process.env.REACT_APP_PROJECT_ID,
@@ -11,13 +13,17 @@ export const app = initializeApp({
   // messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
   // measurementId: process.env.REACT_APP_MEASUREMENT_ID,
 
-  apiKey: "AIzaSyCj0pbIQgk8FtqIrsU6knTn5pWrjravrcY",
-  authDomain: "dear-lereve-539de.firebaseapp.com",
-  projectId: "dear-lereve-539de",
-  storageBucket: "dear-lereve-539de.appspot.com",
-  messagingSenderId: "914938884518",
-  appId: "1:914938884518:web:0a0b2bca5b226ebb539f67",
-  measurementId: "G-YDKJ8N48E6",
+  apiKey: 'AIzaSyCj0pbIQgk8FtqIrsU6knTn5pWrjravrcY',
+  authDomain: 'dear-lereve-539de.firebaseapp.com',
+  projectId: 'dear-lereve-539de',
+  storageBucket: 'dear-lereve-539de.appspot.com',
+  messagingSenderId: '914938884518',
+  appId: '1:914938884518:web:0a0b2bca5b226ebb539f67',
+  measurementId: 'G-YDKJ8N48E6',
 });
+
+export const auth = getAuth(app);
+export const storage = getStorage(app);
+export const database = getDatabase(app);
 
 export default app;

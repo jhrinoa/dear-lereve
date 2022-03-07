@@ -3,7 +3,7 @@ import { useAuth } from "../hooks/useAuth";
 
 export function PrivateRoute({ children, ...rest }) {
   const { user } = useAuth();
-  console.log("user: ", user);
+  // token validation
 
   return user ? children : <Navigate to="/login" />;
 }

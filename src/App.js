@@ -1,9 +1,9 @@
-import "./App.css";
-import { Routes, Route } from "react-router-dom";
-import AdminLogin from "./features/admin/AdminLogin.component";
-import AdminPage from "./features/admin/AdminPage.component";
-import Products from "./features/products/Products.components";
-import { PrivateRoute } from "./utils/PrivateRoute";
+import './App.css';
+import { Routes, Route } from 'react-router-dom';
+import AdminLogin from './features/admin/AdminLogin.component';
+import ProductRegister from './features/admin/ProductRegister.component';
+import Products from './features/products/Products.components';
+import { PrivateRoute } from './utils/PrivateRoute';
 
 function App() {
   return (
@@ -13,9 +13,9 @@ function App() {
       <Route
         path="/admin"
         element={
-          <PrivateRoute>
-            <AdminPage />
-          </PrivateRoute>
+          // <PrivateRoute>
+          <ProductRegister />
+          // </PrivateRoute>
         }
       />
     </Routes>
