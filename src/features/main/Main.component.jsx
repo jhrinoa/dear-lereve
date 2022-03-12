@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { green, purple } from '@mui/material/colors';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -13,7 +14,8 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from '../../theme';
 
 function Copyright() {
   return (
@@ -29,19 +31,11 @@ function Copyright() {
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-const theme = createTheme();
-
 export default function Main() {
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <CssBaseline />
-      <AppBar position="relative">
-        <Toolbar>
-          <Typography variant="h6" color="inherit" noWrap>
-            Dear Lereve
-          </Typography>
-        </Toolbar>
-      </AppBar>
+
       <main>
         {/* Hero unit */}
         <Box
@@ -138,6 +132,6 @@ export default function Main() {
         <Copyright />
       </Box>
       {/* End footer */}
-    </ThemeProvider>
+    </>
   );
 }
