@@ -6,6 +6,12 @@ import {
   ref as stgRef,
   uploadBytesResumable,
 } from 'firebase/storage';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Input from '@mui/material/Input';
+import Box from '@mui/material/Box';
+import { Container } from '@mui/material';
+import TextField from '@mui/material/TextField';
 
 const ProductRegister = () => {
   const [mainImg, setMainImg] = useState();
@@ -15,8 +21,6 @@ const ProductRegister = () => {
   const [size, setSize] = useState('');
   const [price, setPrice] = useState('');
   const [description, setDescription] = useState('');
-
-  const prod_id = '123';
 
   const createProduct = () => {
     const product = {
@@ -28,26 +32,27 @@ const ProductRegister = () => {
       images,
       mainImg: images[mainImg],
     };
-    console.log('will create: ', product);
 
     set(dbRef(database, 'products/' + name), product);
   };
 
   const formSubmitHandler = (e) => {
     e.preventDefault();
+
+    setImages([]);
     const target = e.target[0];
 
     for (let i = 0; i < target.files.length; i++) {
       const file = target.files[i];
 
-      uploadFile(file, prod_id);
+      uploadFile(file, name);
     }
   };
 
-  const uploadFile = (file, prod_id) => {
+  const uploadFile = (file, name) => {
     if (!file) return;
 
-    const storageRef = stgRef(storage, `/${prod_id}/images/${file.name}`);
+    const storageRef = stgRef(storage, `/${name}/images/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on(
@@ -67,100 +72,151 @@ const ProductRegister = () => {
     );
   };
   return (
-    <div>
-      <div>ProductRegister page</div>
+    <>
+      <Typography align="center" variant="h4">
+        Product Register
+      </Typography>
 
-      <form onSubmit={formSubmitHandler}>
-        <input type="file" multiple="multiple" />
-        <button type="submit">Upload</button>
-      </form>
-
-      {images.map((imgUrl, index) => (
-        <div key={imgUrl}>
-          <img src={imgUrl} width="100" height="100" />
-          <input
-            type="checkbox"
-            checked={index === mainImg}
-            onClick={() => {
-              setMainImg(index);
+      <Container
+        sx={{
+          p: '0 0 30px 0',
+        }}
+      >
+        <Box
+          sx={{
+            p: '20px 0',
+            width: 300,
+          }}
+        >
+          <Box
+            sx={{
+              padding: 1,
             }}
-          />
-        </div>
-      ))}
-      <br />
-      <br />
-      <br />
+          >
+            <TextField
+              label="Name"
+              fullWidth
+              variant="outlined"
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
+            />
+          </Box>
 
-      <label htmlFor="product-name">Name</label>
-      <input
-        id="product-name"
-        type="text"
-        value={name}
-        onChange={(e) => {
-          setName(e.target.value);
-        }}
-      />
+          <Box
+            sx={{
+              padding: 1,
+            }}
+          >
+            <TextField
+              label="Description"
+              variant="outlined"
+              fullWidth
+              multiline
+              rows={4}
+              value={description}
+              onChange={(e) => {
+                setDescription(e.target.value);
+              }}
+            />
+          </Box>
 
-      <br />
-      <br />
-      <br />
+          <Box
+            sx={{
+              padding: 1,
+            }}
+          >
+            <TextField
+              label="Color"
+              variant="outlined"
+              fullWidth
+              value={color}
+              onChange={(e) => {
+                setColor(e.target.value);
+              }}
+            />
+          </Box>
 
-      <label htmlFor="product-description">Description</label>
-      <textarea
-        id="product-description"
-        value={description}
-        onChange={(e) => {
-          setDescription(e.target.value);
-        }}
-      />
+          <Box
+            sx={{
+              padding: 1,
+            }}
+          >
+            <TextField
+              label="Size"
+              variant="outlined"
+              fullWidth
+              value={size}
+              onChange={(e) => {
+                setSize(e.target.value);
+              }}
+            />
+          </Box>
 
-      <br />
-      <br />
-      <br />
+          <Box
+            sx={{
+              padding: 1,
+            }}
+          >
+            <TextField
+              label="Price"
+              variant="outlined"
+              type="number"
+              fullWidth
+              value={price}
+              onChange={(e) => {
+                setPrice(e.target.value);
+              }}
+              inputProps={{
+                step: 0.01,
+              }}
+            />
+          </Box>
+        </Box>
 
-      <label htmlFor="product-color">Color</label>
-      <input
-        id="product-color"
-        type="text"
-        value={color}
-        onChange={(e) => {
-          setColor(e.target.value);
-        }}
-      />
+        <Box
+          sx={{
+            padding: 1,
+          }}
+        >
+          <form onSubmit={formSubmitHandler}>
+            <input accept="image/*" multiple="multiple" type="file" />
+            <Button
+              variant="contained"
+              type="submit"
+              disabled={name.length < 1}
+            >
+              Upload
+            </Button>
+          </form>
+        </Box>
 
-      <br />
-      <br />
-      <br />
+        <Box
+          sx={{
+            padding: 1,
+            display: 'flex',
+          }}
+        >
+          {images.map((imgUrl, index) => (
+            <div key={imgUrl}>
+              <img src={imgUrl} width="200" />
+              <input
+                type="checkbox"
+                checked={index === mainImg}
+                onClick={() => {
+                  setMainImg(index);
+                }}
+              />
+            </div>
+          ))}
+        </Box>
 
-      <label htmlFor="product-size">Size</label>
-      <input
-        id="product-size"
-        type="text"
-        value={size}
-        onChange={(e) => {
-          setSize(e.target.value);
-        }}
-      />
-
-      <br />
-      <br />
-      <br />
-
-      <label htmlFor="product-price">Price</label>
-      <input
-        id="product-price"
-        type="text"
-        value={price}
-        onChange={(e) => {
-          setPrice(e.target.value);
-        }}
-      />
-
-      <br />
-      <br />
-      <br />
-      <button onClick={createProduct}>Create</button>
-    </div>
+        <Button variant="contained" onClick={createProduct}>
+          Create
+        </Button>
+      </Container>
+    </>
   );
 };
 
