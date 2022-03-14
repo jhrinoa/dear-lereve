@@ -8,17 +8,28 @@ import {
 } from 'firebase/storage';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import Input from '@mui/material/Input';
 import Box from '@mui/material/Box';
-import { Container } from '@mui/material';
+import { Container, FormControl } from '@mui/material';
 import TextField from '@mui/material/TextField';
+import { ChromePicker, CirclePicker } from 'react-color';
+import ListItemText from '@mui/material/ListItemText';
+import Select from '@mui/material/Select';
+import Checkbox from '@mui/material/Checkbox';
+import OutlinedInput from '@mui/material/OutlinedInput';
+
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+
+const SIZES = ['XS', 'S', 'M', 'L', 'XL'];
 
 const ProductRegister = () => {
   const [mainImg, setMainImg] = useState();
   const [images, setImages] = useState([]);
   const [name, setName] = useState('');
   const [color, setColor] = useState('');
-  const [size, setSize] = useState('');
+  const [colors, setColors] = useState([]);
+  const [deletingColor, setDeletingColor] = useState('');
+  const [sizes, setSizes] = useState([]);
   const [price, setPrice] = useState('');
   const [description, setDescription] = useState('');
 
@@ -26,7 +37,7 @@ const ProductRegister = () => {
     const product = {
       name,
       color,
-      size,
+      sizes,
       price,
       description,
       images,
@@ -49,20 +60,15 @@ const ProductRegister = () => {
     }
   };
 
-  const uploadFile = (file, name) => {
+  const uploadFile = (file, prod_name) => {
     if (!file) return;
 
-    const storageRef = stgRef(storage, `/${name}/images/${file.name}`);
+    const storageRef = stgRef(storage, `/${prod_name}/images/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on(
       'state_changed',
-      (snapshot) => {
-        const prog = Math.round(
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        );
-        console.log('prog: ', prog);
-      },
+      () => {},
       (err) => console.error(err),
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
@@ -127,15 +133,43 @@ const ProductRegister = () => {
               padding: 1,
             }}
           >
-            <TextField
-              label="Color"
-              variant="outlined"
-              fullWidth
-              value={color}
-              onChange={(e) => {
-                setColor(e.target.value);
+            <ChromePicker
+              disableAlpha
+              color={color}
+              onChangeComplete={(col) => {
+                setColor(col.hex);
               }}
             />
+            <Typography sx={{ pt: 2 }}>Selected Colors: </Typography>
+            <CirclePicker
+              colors={colors}
+              onChangeComplete={(col) => {
+                setDeletingColor(col.hex);
+              }}
+            />
+            <Button
+              disabled={!color}
+              variant="contained"
+              onClick={() => {
+                if (colors.findIndex((col) => col === color) < 0) {
+                  setColors((prevState) => [...prevState, color]);
+                }
+              }}
+              sx={{ mt: 2 }}
+            >
+              Add Color
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => {
+                setColors((prevState) =>
+                  prevState.filter((col) => col !== deletingColor)
+                );
+              }}
+              sx={{ mt: 2, ml: 2 }}
+            >
+              Delete Color
+            </Button>
           </Box>
 
           <Box
@@ -143,17 +177,39 @@ const ProductRegister = () => {
               padding: 1,
             }}
           >
-            <TextField
-              label="Size"
-              variant="outlined"
-              fullWidth
-              value={size}
-              onChange={(e) => {
-                setSize(e.target.value);
+            <FormControl
+              sx={{
+                width: '100%',
               }}
-            />
-          </Box>
+            >
+              <InputLabel id="size-multiple-checkbox-label">Sizes</InputLabel>
+              <Select
+                labelId="size-multiple-checkbox-label"
+                id="size-multiple-checkbox"
+                multiple
+                value={sizes}
+                onChange={(event) => {
+                  const {
+                    target: { value },
+                  } = event;
 
+                  value.sort((a, b) =>
+                    SIZES.indexOf(a) > SIZES.indexOf(b) ? 1 : -1
+                  );
+                  setSizes(value);
+                }}
+                input={<OutlinedInput label="Sizes" />}
+                renderValue={(selected) => selected.join(', ')}
+              >
+                {SIZES.map((size) => (
+                  <MenuItem key={size} value={size}>
+                    <Checkbox checked={sizes.indexOf(size) > -1} />
+                    <ListItemText primary={size} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
           <Box
             sx={{
               padding: 1,
