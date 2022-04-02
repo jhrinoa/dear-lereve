@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useReducer } from 'react';
 import { storage, database } from '../../base';
 import { ref as dbRef, set } from 'firebase/database';
 import {
@@ -21,6 +21,16 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 
 const SIZES = ['XS', 'S', 'M', 'L', 'XL'];
+const CATEGERY = [
+  'outer',
+  'top',
+  'bottom',
+  'ops',
+  'set',
+  'underwear',
+  'socks',
+  'acc',
+];
 
 const ProductRegister = () => {
   const [mainImg, setMainImg] = useState();
@@ -30,8 +40,31 @@ const ProductRegister = () => {
   const [colors, setColors] = useState([]);
   const [deletingColor, setDeletingColor] = useState('');
   const [sizes, setSizes] = useState([]);
-  const [price, setPrice] = useState('');
+  const [price, setPrice] = useState();
   const [description, setDescription] = useState('');
+  const [labels, setLabels] = useState([]);
+  const [discountRate, setDiscountRate] = useState(0);
+
+  const [loading, setLoading] = useState(false);
+  const [response, setResponse] = useState('');
+
+  const uploadImgRef = useRef();
+  const forceUpdate = useReducer(() => ({}), {})[1];
+
+  const resetForm = () => {
+    setMainImg();
+    setImages([]);
+    setName('');
+    setColor('');
+    setColors([]);
+    setDeletingColor('');
+    setSizes([]);
+    setPrice();
+    setDescription('');
+    setLabels([]);
+    setDiscountRate(0);
+    setLoading(false);
+  };
 
   const createProduct = () => {
     const product = {
@@ -42,9 +75,30 @@ const ProductRegister = () => {
       description,
       images,
       mainImg: images[mainImg],
+      labels,
+      discountRate,
     };
 
-    set(dbRef(database, 'products/' + name), product);
+    setLoading(true);
+
+    resetForm();
+
+    try {
+      set(dbRef(database, 'products/' + name), product)
+        .then(() => {
+          resetForm();
+          setResponse('Success');
+        })
+        .catch((err) => {
+          console.log('error: ', err);
+          setLoading(false);
+          setResponse('Failed!');
+        });
+    } catch (err) {
+      console.error('error: ', err);
+      setLoading(false);
+      setResponse('Failed!');
+    }
   };
 
   const formSubmitHandler = (e) => {
@@ -72,11 +126,13 @@ const ProductRegister = () => {
       (err) => console.error(err),
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+          uploadImgRef.current.value = '';
           setImages((prevState) => [...prevState, url]);
         });
       }
     );
   };
+
   return (
     <>
       <Typography align="center" variant="h4">
@@ -91,7 +147,6 @@ const ProductRegister = () => {
         <Box
           sx={{
             p: '20px 0',
-            width: 300,
           }}
         >
           <Box
@@ -226,8 +281,76 @@ const ProductRegister = () => {
               }}
               inputProps={{
                 step: 0.01,
+                min: 0,
               }}
             />
+          </Box>
+
+          <Box
+            sx={{
+              padding: 1,
+            }}
+          >
+            <TextField
+              label="Discount Rate (%)"
+              variant="outlined"
+              type="number"
+              fullWidth
+              value={discountRate}
+              onChange={(e) => {
+                let rate = e.target.value;
+                if (rate < 0) {
+                  rate = 0;
+                }
+
+                if (rate > 100) {
+                  rate = 100;
+                }
+
+                setDiscountRate(rate);
+              }}
+              inputProps={{
+                step: 1,
+                min: 0,
+                max: 100,
+              }}
+            />
+          </Box>
+
+          <Box
+            sx={{
+              padding: 1,
+            }}
+          >
+            <FormControl
+              sx={{
+                width: '100%',
+              }}
+            >
+              <InputLabel id="size-multiple-checkbox-label">Labels</InputLabel>
+              <Select
+                labelId="label-multiple-checkbox-label"
+                id="label-multiple-checkbox"
+                multiple
+                value={labels}
+                onChange={(event) => {
+                  const {
+                    target: { value },
+                  } = event;
+
+                  setLabels(value);
+                }}
+                input={<OutlinedInput multiline={true} label="Labels" />}
+                renderValue={(selected) => selected.join(', ')}
+              >
+                {CATEGERY.map((cat) => (
+                  <MenuItem key={cat} value={cat}>
+                    <Checkbox checked={labels.indexOf(cat) > -1} />
+                    <ListItemText primary={cat} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Box>
         </Box>
 
@@ -237,11 +360,19 @@ const ProductRegister = () => {
           }}
         >
           <form onSubmit={formSubmitHandler}>
-            <input accept="image/*" multiple="multiple" type="file" />
+            <input
+              accept="image/*"
+              multiple="multiple"
+              type="file"
+              ref={uploadImgRef}
+              onChange={() => {
+                forceUpdate();
+              }}
+            />
             <Button
               variant="contained"
               type="submit"
-              disabled={name.length < 1}
+              disabled={!uploadImgRef.current?.value}
             >
               Upload
             </Button>
@@ -252,23 +383,31 @@ const ProductRegister = () => {
           sx={{
             padding: 1,
             display: 'flex',
+            flexWrap: 'wrap',
           }}
         >
           {images.map((imgUrl, index) => (
-            <div key={imgUrl}>
+            <div
+              style={{
+                display: 'flex',
+                flexFlow: 'column',
+                margin: 10,
+                cursor: 'pointer',
+              }}
+              key={imgUrl}
+              onClick={() => {
+                setMainImg(index);
+              }}
+            >
               <img src={imgUrl} width="200" />
-              <input
-                type="checkbox"
-                checked={index === mainImg}
-                onClick={() => {
-                  setMainImg(index);
-                }}
-              />
+              <Checkbox checked={index === mainImg} />
             </div>
           ))}
         </Box>
 
-        <Button variant="contained" onClick={createProduct}>
+        <Typography sx={{ pt: 2 }}>{response}</Typography>
+
+        <Button disabled={loading} variant="contained" onClick={createProduct}>
           Create
         </Button>
       </Container>
