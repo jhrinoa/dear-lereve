@@ -24,12 +24,11 @@ function App() {
         <Route
           path="/admin"
           element={
-            // <PrivateRoute>
-            <Suspense fallback={<div>Loading...</div>}>
-              <ProductRegister />
-            </Suspense>
-
-            // </PrivateRoute>
+            <PrivateRoute>
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProductRegister />
+              </Suspense>
+            </PrivateRoute>
           }
         />
       </Routes>
