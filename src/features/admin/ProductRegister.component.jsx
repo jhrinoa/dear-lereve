@@ -20,7 +20,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 
-const SIZES = ['XS', 'S', 'M', 'L', 'XL'];
+const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'FREE'];
 const CATEGERY = [
   'outer',
   'top',
@@ -92,12 +92,12 @@ const ProductRegister = () => {
         .catch((err) => {
           console.log('error: ', err);
           setLoading(false);
-          setResponse('Failed!');
+          setResponse(`Failed with an error: ${err}`);
         });
     } catch (err) {
       console.error('error: ', err);
       setLoading(false);
-      setResponse('Failed!');
+      setResponse(`Failed with an error: ${err}`);
     }
   };
 
