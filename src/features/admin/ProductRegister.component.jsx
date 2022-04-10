@@ -46,7 +46,7 @@ const ProductRegister = () => {
   const [discountRate, setDiscountRate] = useState(0);
 
   const [loading, setLoading] = useState(false);
-  const [response, setResponse] = useState('');
+  const [message, setMessage] = useState('');
 
   const uploadImgRef = useRef();
   const forceUpdate = useReducer(() => ({}), {})[1];
@@ -87,22 +87,27 @@ const ProductRegister = () => {
       set(dbRef(database, 'products/' + name), product)
         .then(() => {
           resetForm();
-          setResponse('Success');
+          setMessage('Success');
         })
         .catch((err) => {
           console.log('error: ', err);
           setLoading(false);
-          setResponse(`Failed with an error: ${err}`);
+          setMessage(`Failed with an error: ${err}`);
         });
     } catch (err) {
       console.error('error: ', err);
       setLoading(false);
-      setResponse(`Failed with an error: ${err}`);
+      setMessage(`Failed with an error: ${err}`);
     }
   };
 
   const formSubmitHandler = (e) => {
     e.preventDefault();
+
+    if (!name) {
+      setMessage('Set name first');
+      return;
+    }
 
     setImages([]);
     const target = e.target[0];
@@ -405,7 +410,7 @@ const ProductRegister = () => {
           ))}
         </Box>
 
-        <Typography sx={{ pt: 2 }}>{response}</Typography>
+        <Typography sx={{ pt: 2 }}>{message}</Typography>
 
         <Button disabled={loading} variant="contained" onClick={createProduct}>
           Create
