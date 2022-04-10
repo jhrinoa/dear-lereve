@@ -1,6 +1,4 @@
 import * as React from 'react';
-import { green, purple } from '@mui/material/colors';
-import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -10,12 +8,10 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
-import { ThemeProvider } from '@mui/material/styles';
-import theme from '../../theme';
+import Products from '../../features/products/Products.components';
 
 function Copyright() {
   return (
@@ -37,7 +33,6 @@ export default function Main() {
       <CssBaseline />
 
       <main>
-        {/* Hero unit */}
         <Box
           sx={{
             bgcolor: 'background.paper',
@@ -77,6 +72,7 @@ export default function Main() {
           </Container>
         </Box>
         <Container sx={{ py: 8 }} maxWidth="md">
+          <Products url="all"></Products>
           {/* End hero unit */}
           <Grid container spacing={4}>
             {cards.map((card) => (

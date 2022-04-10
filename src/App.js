@@ -19,7 +19,13 @@ function App() {
       <ResponsiveAppBar />
       <Routes>
         <Route path="/" element={<Main></Main>} />
-        <Route path="/products" element={<Products></Products>} />
+        <Route path="/top" element={<Products url={'top'}></Products>} />
+        <Route path="/bottom" element={<Products url={'bottom'}></Products>} />
+        <Route path="/set" element={<Products url={'set'}></Products>} />
+        <Route path="/ops" element={<Products url={'ops'}></Products>} />
+        <Route path="/socks" element={<Products url={'socks'}></Products>} />
+        <Route path="/acc" element={<Products url={'acc'}></Products>} />
+        <Route path="/outer" element={<Products url={'outer'}></Products>} />
         <Route path="/login" element={<AdminLogin />} />
         <Route
           path="/admin"

@@ -21,16 +21,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'FREE'];
-const CATEGERY = [
-  'outer',
-  'top',
-  'bottom',
-  'ops',
-  'set',
-  'underwear',
-  'socks',
-  'acc',
-];
+const CATEGERY = ['outer', 'top', 'bottom', 'ops', 'set', 'socks', 'acc'];
 
 const ProductRegister = () => {
   const [mainImg, setMainImg] = useState();
@@ -42,7 +33,7 @@ const ProductRegister = () => {
   const [sizes, setSizes] = useState([]);
   const [price, setPrice] = useState();
   const [description, setDescription] = useState('');
-  const [labels, setLabels] = useState([]);
+  const [labels, setLabels] = useState({});
   const [discountRate, setDiscountRate] = useState(0);
 
   const [loading, setLoading] = useState(false);
@@ -61,7 +52,7 @@ const ProductRegister = () => {
     setSizes([]);
     setPrice();
     setDescription('');
-    setLabels([]);
+    setLabels({});
     setDiscountRate(0);
     setLoading(false);
   };
@@ -332,25 +323,25 @@ const ProductRegister = () => {
                 width: '100%',
               }}
             >
-              <InputLabel id="size-multiple-checkbox-label">Labels</InputLabel>
+              <InputLabel id="label-multiple-checkbox-label">Labels</InputLabel>
               <Select
                 labelId="label-multiple-checkbox-label"
                 id="label-multiple-checkbox"
                 multiple
-                value={labels}
+                value={Object.keys(labels)}
                 onChange={(event) => {
                   const {
                     target: { value },
                   } = event;
 
-                  setLabels(value);
+                  setLabels(value.reduce((a, v) => ({ ...a, [v]: true }), {}));
                 }}
-                input={<OutlinedInput multiline={true} label="Labels" />}
+                input={<OutlinedInput label="Labels" />}
                 renderValue={(selected) => selected.join(', ')}
               >
                 {CATEGERY.map((cat) => (
                   <MenuItem key={cat} value={cat}>
-                    <Checkbox checked={labels.indexOf(cat) > -1} />
+                    <Checkbox checked={!!labels[cat]} />
                     <ListItemText primary={cat} />
                   </MenuItem>
                 ))}
@@ -404,7 +395,7 @@ const ProductRegister = () => {
                 setMainImg(index);
               }}
             >
-              <img src={imgUrl} width="200" />
+              <img src={imgUrl} alt={`img_${index} for ${name}`} width="200" />
               <Checkbox checked={index === mainImg} />
             </div>
           ))}

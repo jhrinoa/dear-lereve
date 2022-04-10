@@ -8,9 +8,7 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 
 const TITLE = 'Dear Lereve';
@@ -20,12 +18,32 @@ const pages = [
     url: './',
   },
   {
-    text: 'All',
-    url: './all',
-  },
-  {
     text: 'Top',
     url: './top',
+  },
+  {
+    text: 'Bottom',
+    url: './bottom',
+  },
+  {
+    text: 'Outer',
+    url: './outer',
+  },
+  {
+    text: 'One Piece',
+    url: './ops',
+  },
+  {
+    text: 'Set',
+    url: './set',
+  },
+  {
+    text: 'Socks',
+    url: './socks',
+  },
+  {
+    text: 'Accessories',
+    url: './acc',
   },
   {
     text: 'Admin',
