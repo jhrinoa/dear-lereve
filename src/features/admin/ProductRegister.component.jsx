@@ -75,7 +75,7 @@ const ProductRegister = () => {
     resetForm();
 
     try {
-      set(dbRef(database, 'products/' + name), product)
+      set(dbRef(database, 'products/' + encodeURI(name)), product)
         .then(() => {
           resetForm();
           setMessage('Success');
@@ -129,6 +129,8 @@ const ProductRegister = () => {
     );
   };
 
+  const isNameInvalid = !!name.match(/[.|$|#|[|\]]/);
+
   return (
     <>
       <Typography align="center" variant="h4">
@@ -158,6 +160,12 @@ const ProductRegister = () => {
               onChange={(e) => {
                 setName(e.target.value);
               }}
+              error={isNameInvalid}
+              helperText={
+                isNameInvalid
+                  ? 'Name should not contain ".", "#", "$", "[", or "]"'
+                  : ''
+              }
             />
           </Box>
 
@@ -403,7 +411,11 @@ const ProductRegister = () => {
 
         <Typography sx={{ pt: 2 }}>{message}</Typography>
 
-        <Button disabled={loading} variant="contained" onClick={createProduct}>
+        <Button
+          disabled={loading || isNameInvalid}
+          variant="contained"
+          onClick={createProduct}
+        >
           Create
         </Button>
       </Container>

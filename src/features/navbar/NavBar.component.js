@@ -72,7 +72,6 @@ const ResponsiveAppBar = () => {
             noWrap
             component="div"
             sx={{ flexGrow: 1, mr: 2, display: { xs: 'none', md: 'flex' } }}
-            color="text.primary"
           >
             {TITLE}
           </Typography>
