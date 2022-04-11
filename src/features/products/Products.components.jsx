@@ -56,7 +56,11 @@ const Products = ({ url }) => {
                 alt={product.name}
               />
               <CardContent sx={{ flexGrow: 0 }}>
-                <Grid container justifyContent="space-between">
+                <Grid
+                  container
+                  justifyContent="space-between"
+                  flexWrap="nowrap"
+                >
                   <Typography inline variant="h5" align="left" marginRight={1}>
                     {product.name}
                   </Typography>
