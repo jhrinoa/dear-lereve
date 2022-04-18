@@ -16,9 +16,13 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
+import { useAuth } from '../../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 const Products = ({ url }) => {
   const [products, setProducts] = useState([]);
+  const { user } = useAuth();
+  let navigate = useNavigate();
 
   useEffect(() => {
     const db = getDatabase();
@@ -47,6 +51,10 @@ const Products = ({ url }) => {
                 height: '100%',
                 display: 'flex',
                 flexDirection: 'column',
+                cursor: 'pointer',
+              }}
+              onClick={() => {
+                navigate(`/product/${product.name}`);
               }}
             >
               <CardMedia
@@ -61,20 +69,21 @@ const Products = ({ url }) => {
                   justifyContent="space-between"
                   flexWrap="nowrap"
                 >
-                  <Typography inline variant="h5" align="left" marginRight={1}>
+                  <Typography inline variant="h6" align="left" marginRight={1}>
                     {product.name}
                   </Typography>
-                  <Typography inline variant="p" align="right">
+                  <Typography inline variant="p" align="right" margin="auto 0">
                     {`$${product.price}`}
                   </Typography>
                 </Grid>
 
                 <Typography marginTop={2}>{product.description}</Typography>
               </CardContent>
-              <CardActions>
-                <Button size="small">View</Button>
-                <Button size="small">Edit</Button>
-              </CardActions>
+              {user ? (
+                <CardActions sx={{ margin: 'auto' }}>
+                  <Button size="small">Edit</Button>
+                </CardActions>
+              ) : null}
             </Card>
           </Grid>
         ))}

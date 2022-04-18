@@ -5,6 +5,7 @@ import AdminLogin from './features/admin/AdminLogin.component';
 import Main from './features/main/Main.component';
 import ResponsiveAppBar from './features/navbar/NavBar.component';
 import Products from './features/products/Products.components';
+import Product from './features/products/Product.component';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';
 import { PrivateRoute } from './utils/PrivateRoute';
@@ -26,6 +27,9 @@ function App() {
         <Route path="/socks" element={<Products url={'socks'}></Products>} />
         <Route path="/acc" element={<Products url={'acc'}></Products>} />
         <Route path="/outer" element={<Products url={'outer'}></Products>} />
+        <Route path="/product">
+          <Route path=":productName" element={<Product />} />
+        </Route>
         <Route path="/login" element={<AdminLogin />} />
         <Route
           path="/admin"
