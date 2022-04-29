@@ -110,7 +110,7 @@ const ResponsiveAppBar = () => {
                   key={page.text}
                   onClick={() => {
                     handleCloseNavMenu();
-                    navigate(page.url, { replace: true });
+                    navigate(page.url);
                   }}
                 >
                   <Typography textAlign="center">{page.text}</Typography>
@@ -132,7 +132,7 @@ const ResponsiveAppBar = () => {
                 key={page.text}
                 onClick={() => {
                   handleCloseNavMenu();
-                  navigate(page.url, { replace: true });
+                  navigate(page.url);
                 }}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >

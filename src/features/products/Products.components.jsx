@@ -22,7 +22,7 @@ import { useNavigate } from 'react-router-dom';
 const Products = ({ url }) => {
   const [products, setProducts] = useState([]);
   const { user } = useAuth();
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const db = getDatabase();
@@ -42,8 +42,8 @@ const Products = ({ url }) => {
   }, [url]);
 
   return (
-    <Container sx={{ py: 6 }} maxWidth="md">
-      <Grid container spacing={4}>
+    <Container sx={{ py: 6, height: 1500 }} maxWidth="md">
+      <Grid container spacing={2}>
         {products.map((product) => (
           <Grid item key={product.name} xs={12} sm={6} md={4}>
             <Card
@@ -58,7 +58,7 @@ const Products = ({ url }) => {
               }}
             >
               <CardMedia
-                sx={{ flexGrow: 1, objectFit: 'contain' }}
+                sx={{ height: 200, objectFit: 'contain' }}
                 component="img"
                 image={product.mainImg}
                 alt={product.name}
