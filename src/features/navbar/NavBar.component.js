@@ -19,31 +19,31 @@ const pages = [
   },
   {
     text: 'Top',
-    url: './top',
+    url: './categories/top',
   },
   {
     text: 'Bottom',
-    url: './bottom',
+    url: './categories/bottom',
   },
   {
     text: 'Outer',
-    url: './outer',
+    url: './categories/outer',
   },
   {
     text: 'One Piece',
-    url: './ops',
+    url: './categories/ops',
   },
   {
     text: 'Set',
-    url: './set',
+    url: './categories/set',
   },
   {
     text: 'Socks',
-    url: './socks',
+    url: './categories/socks',
   },
   {
     text: 'Accessories',
-    url: './acc',
+    url: './categories/acc',
   },
   {
     text: 'Admin',

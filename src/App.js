@@ -20,13 +20,9 @@ function App() {
       <ResponsiveAppBar />
       <Routes>
         <Route path="/" element={<Main></Main>} />
-        <Route path="/top" element={<Products url={'top'}></Products>} />
-        <Route path="/bottom" element={<Products url={'bottom'}></Products>} />
-        <Route path="/set" element={<Products url={'set'}></Products>} />
-        <Route path="/ops" element={<Products url={'ops'}></Products>} />
-        <Route path="/socks" element={<Products url={'socks'}></Products>} />
-        <Route path="/acc" element={<Products url={'acc'}></Products>} />
-        <Route path="/outer" element={<Products url={'outer'}></Products>} />
+        <Route path="/categories">
+          <Route path=":category" element={<Products />} />
+        </Route>
         <Route path="/product">
           <Route path=":productName" element={<Product />} />
         </Route>
@@ -34,11 +30,11 @@ function App() {
         <Route
           path="/admin"
           element={
-            <PrivateRoute>
-              <Suspense fallback={<div>Loading...</div>}>
-                <ProductRegister />
-              </Suspense>
-            </PrivateRoute>
+            // <PrivateRoute>
+            <Suspense fallback={<div>Loading...</div>}>
+              <ProductRegister />
+            </Suspense>
+            // </PrivateRoute>
           }
         />
       </Routes>
