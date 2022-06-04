@@ -7,10 +7,13 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
+import { useDispatch } from 'react-redux';
+import { setLastViewedProductName } from './productSlice';
 
 const ProductCard = ({ product, isEditable, scrollTo }) => {
   const navigate = useNavigate();
   const cardRef = useRef();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!scrollTo || !cardRef) {
@@ -34,6 +37,7 @@ const ProductCard = ({ product, isEditable, scrollTo }) => {
         }}
         ref={cardRef}
         onClick={() => {
+          dispatch(setLastViewedProductName(product.name));
           navigate(`/product/${product.name}`);
         }}
       >
