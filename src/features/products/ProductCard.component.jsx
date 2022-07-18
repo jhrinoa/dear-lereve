@@ -60,8 +60,6 @@ const ProductCard = ({ product, isEditable, scrollTo }) => {
               {`$${product.price}`}
             </Typography>
           </Grid>
-
-          <Typography marginTop={2}>{product.description}</Typography>
         </CardContent>
         {isEditable ? (
           <CardActions sx={{ justifyContent: 'space-evenly' }}>
@@ -69,7 +67,6 @@ const ProductCard = ({ product, isEditable, scrollTo }) => {
               size="small"
               onClick={(e) => {
                 e.stopPropagation();
-                console.log('edit now: ', product);
               }}
             >
               Edit
@@ -84,20 +81,15 @@ const ProductCard = ({ product, isEditable, scrollTo }) => {
                   const desertRef = ref(storage, imgLink);
 
                   deleteObject(desertRef)
-                    .then(() => {
-                      console.log('deleted img: ', desertRef);
-                    })
+                    .then(() => {})
                     .catch((error) => {
                       console.log(`failed deleting image ${desertRef}`, error);
                     });
                 });
 
-                console.log('product.id: ', product.id);
                 // delete product
                 remove(dbRef(database, 'products/' + product.id))
-                  .then(() => {
-                    console.log('deleted product: ', product.id);
-                  })
+                  .then(() => {})
                   .catch((error) => {
                     console.log(
                       `Failed on deleting ${product.id} with error`,
