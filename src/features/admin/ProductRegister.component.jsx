@@ -6,12 +6,13 @@ import {
   ref as stgRef,
   uploadBytesResumable,
 } from 'firebase/storage';
+import { nanoid } from 'nanoid';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import { Container, FormControl } from '@mui/material';
 import TextField from '@mui/material/TextField';
-import { ChromePicker, CirclePicker } from 'react-color';
+import { HexColorPicker } from 'react-colorful';
 import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
@@ -20,8 +21,10 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 
+import Color from '../../components/Color.component';
+
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'FREE'];
-const CATEGERY = ['outer', 'top', 'bottom', 'ops', 'set', 'socks', 'acc'];
+const CATEGERY = ['now', 'sale', 'baby', 'acc'];
 
 const ProductRegister = () => {
   const [mainImg, setMainImg] = useState();
@@ -29,12 +32,13 @@ const ProductRegister = () => {
   const [name, setName] = useState('');
   const [color, setColor] = useState('');
   const [colors, setColors] = useState([]);
-  const [deletingColor, setDeletingColor] = useState('');
+  const [selectedColor, setSelectedColor] = useState('');
   const [sizes, setSizes] = useState([]);
-  const [price, setPrice] = useState();
+  const [price, setPrice] = useState(null);
   const [description, setDescription] = useState('');
   const [labels, setLabels] = useState({});
   const [discountRate, setDiscountRate] = useState(0);
+  const [quantity, setQuantity] = useState(null);
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -48,9 +52,9 @@ const ProductRegister = () => {
     setName('');
     setColor('');
     setColors([]);
-    setDeletingColor('');
+    setSelectedColor('');
     setSizes([]);
-    setPrice();
+    setPrice(null);
     setDescription('');
     setLabels({});
     setDiscountRate(0);
@@ -58,7 +62,9 @@ const ProductRegister = () => {
   };
 
   const createProduct = () => {
+    const id = nanoid();
     const product = {
+      id,
       name,
       color,
       sizes,
@@ -68,14 +74,13 @@ const ProductRegister = () => {
       mainImg: images[mainImg],
       labels,
       discountRate,
+      quantity,
     };
 
     setLoading(true);
 
-    resetForm();
-
     try {
-      set(dbRef(database, 'products/' + encodeURI(name)), product)
+      set(dbRef(database, 'products/' + id), product)
         .then(() => {
           resetForm();
           setMessage('Success');
@@ -192,20 +197,19 @@ const ProductRegister = () => {
               padding: 1,
             }}
           >
-            <ChromePicker
-              disableAlpha
-              color={color}
-              onChangeComplete={(col) => {
-                setColor(col.hex);
-              }}
-            />
+            <HexColorPicker color={color} onChange={setColor} />
             <Typography sx={{ pt: 2 }}>Selected Colors: </Typography>
-            <CirclePicker
-              colors={colors}
-              onChangeComplete={(col) => {
-                setDeletingColor(col.hex);
-              }}
-            />
+            <section>
+              {colors.map((c) => (
+                <Color
+                  selected={c === selectedColor}
+                  key={c}
+                  colors={c}
+                  onClick={() => setSelectedColor(c)}
+                />
+              ))}
+            </section>
+
             <Button
               disabled={!color}
               variant="contained"
@@ -222,7 +226,7 @@ const ProductRegister = () => {
               variant="contained"
               onClick={() => {
                 setColors((prevState) =>
-                  prevState.filter((col) => col !== deletingColor)
+                  prevState.filter((col) => col !== selectedColor)
                 );
               }}
               sx={{ mt: 2, ml: 2 }}

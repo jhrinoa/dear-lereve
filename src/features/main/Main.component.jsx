@@ -11,7 +11,7 @@ function Copyright() {
     <Typography variant="body2" color="text.secondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://google.com/">
-        Dear Lereve
+        Our Lereve
       </Link>
       {'.'}
     </Typography>
@@ -38,7 +38,7 @@ export default function Main() {
               color="text.primary"
               gutterBottom
             >
-              Dear Lereve
+              Our Lereve
             </Typography>
             <Typography
               variant="h5"
@@ -46,7 +46,7 @@ export default function Main() {
               color="text.secondary"
               paragraph
             >
-              패션을 창조하는 디어르레브
+              패션을 창조하는 아워르레브
             </Typography>
           </Container>
         </Box>

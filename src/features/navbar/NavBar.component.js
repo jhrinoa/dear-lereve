@@ -10,8 +10,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
+import Link from '@mui/material/Link';
 
-const TITLE = 'Dear Lereve';
+const TITLE = 'Our Lereve';
 const pages = [
   {
     text: 'Home',
@@ -73,7 +74,9 @@ const ResponsiveAppBar = () => {
             component="div"
             sx={{ flexGrow: 1, mr: 2, display: { xs: 'none', md: 'flex' } }}
           >
-            {TITLE}
+            <Link color="inherit" href="/" underline="none">
+              {TITLE}
+            </Link>
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
