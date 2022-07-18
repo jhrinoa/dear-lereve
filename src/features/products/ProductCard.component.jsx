@@ -10,6 +10,10 @@ import Grid from '@mui/material/Grid';
 import { useDispatch } from 'react-redux';
 import { setLastViewedProductName } from './productSlice';
 
+import { storage, database } from '../../base';
+import { ref, deleteObject } from 'firebase/storage';
+import { ref as dbRef, remove } from 'firebase/database';
+
 const ProductCard = ({ product, isEditable, scrollTo }) => {
   const navigate = useNavigate();
   const cardRef = useRef();
@@ -60,8 +64,50 @@ const ProductCard = ({ product, isEditable, scrollTo }) => {
           <Typography marginTop={2}>{product.description}</Typography>
         </CardContent>
         {isEditable ? (
-          <CardActions sx={{ margin: 'auto' }}>
-            <Button size="small">Edit</Button>
+          <CardActions sx={{ justifyContent: 'space-evenly' }}>
+            <Button
+              size="small"
+              onClick={(e) => {
+                e.stopPropagation();
+                console.log('edit now: ', product);
+              }}
+            >
+              Edit
+            </Button>
+            <Button
+              size="small"
+              onClick={(e) => {
+                e.stopPropagation();
+
+                // delete images
+                product.images.forEach((imgLink) => {
+                  const desertRef = ref(storage, imgLink);
+
+                  deleteObject(desertRef)
+                    .then(() => {
+                      console.log('deleted img: ', desertRef);
+                    })
+                    .catch((error) => {
+                      console.log(`failed deleting image ${desertRef}`, error);
+                    });
+                });
+
+                console.log('product.id: ', product.id);
+                // delete product
+                remove(dbRef(database, 'products/' + product.id))
+                  .then(() => {
+                    console.log('deleted product: ', product.id);
+                  })
+                  .catch((error) => {
+                    console.log(
+                      `Failed on deleting ${product.id} with error`,
+                      error
+                    );
+                  });
+              }}
+            >
+              Delete
+            </Button>
           </CardActions>
         ) : null}
       </Card>

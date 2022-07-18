@@ -19,28 +19,16 @@ const pages = [
     url: './',
   },
   {
-    text: 'Top',
-    url: './categories/top',
+    text: 'Available Now',
+    url: './categories/now',
   },
   {
-    text: 'Bottom',
-    url: './categories/bottom',
+    text: 'On Sale',
+    url: './categories/sale',
   },
   {
-    text: 'Outer',
-    url: './categories/outer',
-  },
-  {
-    text: 'One Piece',
-    url: './categories/ops',
-  },
-  {
-    text: 'Set',
-    url: './categories/set',
-  },
-  {
-    text: 'Socks',
-    url: './categories/socks',
+    text: 'Baby',
+    url: './categories/baby',
   },
   {
     text: 'Accessories',

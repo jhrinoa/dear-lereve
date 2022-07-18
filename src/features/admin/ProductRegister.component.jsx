@@ -22,8 +22,8 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 
 import Color from '../../components/Color.component';
+import SizeField from '../../components/SizeField.component';
 
-const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'FREE'];
 const CATEGERY = ['now', 'sale', 'baby', 'acc'];
 
 const ProductRegister = () => {
@@ -34,11 +34,13 @@ const ProductRegister = () => {
   const [colors, setColors] = useState([]);
   const [selectedColor, setSelectedColor] = useState('');
   const [sizes, setSizes] = useState([]);
-  const [price, setPrice] = useState(null);
+  const [price, setPrice] = useState('');
   const [description, setDescription] = useState('');
   const [labels, setLabels] = useState({});
-  const [discountRate, setDiscountRate] = useState(0);
-  const [quantity, setQuantity] = useState(null);
+  const [discountRate, setDiscountRate] = useState('');
+
+  const [quantity, setQuantity] = useState('');
+  const [size, setSize] = useState('');
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -54,10 +56,12 @@ const ProductRegister = () => {
     setColors([]);
     setSelectedColor('');
     setSizes([]);
-    setPrice(null);
+    setPrice('');
     setDescription('');
     setLabels({});
-    setDiscountRate(0);
+    setDiscountRate('');
+    setQuantity('');
+    setSize('');
     setLoading(false);
   };
 
@@ -240,44 +244,6 @@ const ProductRegister = () => {
               padding: 1,
             }}
           >
-            <FormControl
-              sx={{
-                width: '100%',
-              }}
-            >
-              <InputLabel id="size-multiple-checkbox-label">Sizes</InputLabel>
-              <Select
-                labelId="size-multiple-checkbox-label"
-                id="size-multiple-checkbox"
-                multiple
-                value={sizes}
-                onChange={(event) => {
-                  const {
-                    target: { value },
-                  } = event;
-
-                  value.sort((a, b) =>
-                    SIZES.indexOf(a) > SIZES.indexOf(b) ? 1 : -1
-                  );
-                  setSizes(value);
-                }}
-                input={<OutlinedInput label="Sizes" />}
-                renderValue={(selected) => selected.join(', ')}
-              >
-                {SIZES.map((size) => (
-                  <MenuItem key={size} value={size}>
-                    <Checkbox checked={sizes.indexOf(size) > -1} />
-                    <ListItemText primary={size} />
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Box>
-          <Box
-            sx={{
-              padding: 1,
-            }}
-          >
             <TextField
               label="Price"
               variant="outlined"
@@ -323,6 +289,80 @@ const ProductRegister = () => {
                 max: 100,
               }}
             />
+          </Box>
+
+          <Box
+            sx={{
+              padding: 1,
+              mt: 2,
+            }}
+          >
+            <FormControl
+              sx={{
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'row',
+              }}
+            >
+              <TextField
+                label="Size"
+                variant="outlined"
+                value={size}
+                onChange={(e) => {
+                  setSize(e.target.value);
+                }}
+              />
+              <TextField
+                label="Quantity"
+                variant="outlined"
+                type="number"
+                value={quantity}
+                onChange={(e) => {
+                  setQuantity(e.target.value);
+                }}
+                inputProps={{
+                  step: 1,
+                  min: 0,
+                }}
+                sx={{ ml: 1 }}
+              />
+
+              <Button
+                disabled={!size || !quantity || parseInt(quantity) <= 0}
+                variant="contained"
+                onClick={() => {
+                  setSizes((prevState) => [
+                    ...prevState,
+                    {
+                      size,
+                      quantity,
+                    },
+                  ]);
+                }}
+                sx={{ ml: 1 }}
+              >
+                Add Size
+              </Button>
+            </FormControl>
+            <Typography sx={{ pt: 2 }}>Sizes: </Typography>
+            <section>
+              {sizes.map((s) => (
+                <SizeField
+                  size={s}
+                  onDeleteClick={(deletingSize) => {
+                    setSizes((prevState) =>
+                      prevState.filter(
+                        (s) =>
+                          !(
+                            s.size === deletingSize.size &&
+                            s.quantity === deletingSize.quantity
+                          )
+                      )
+                    );
+                  }}
+                />
+              ))}
+            </section>
           </Box>
 
           <Box
