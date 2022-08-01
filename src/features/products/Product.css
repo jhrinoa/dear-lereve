@@ -30,3 +30,16 @@
   width: 100%;
   display: flex;
 }
+
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  font-size: 20px;
+  color: white;
+}
+.swiper-button-next,
+.swiper-button-prev {
+  width: 24px;
+  height: 24px;
+  border-radius: 24px;
+  background-color: grey;
+}

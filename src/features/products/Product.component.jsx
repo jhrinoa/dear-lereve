@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Container } from '@mui/material';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+
 import { getDatabase, ref, query, get } from 'firebase/database';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -38,7 +38,6 @@ const Product = () => {
   ) : (
     <>
       <Swiper
-        loop={true}
         spaceBetween={10}
         navigation={true}
         thumbs={{ swiper: thumbsSwiper }}
@@ -48,7 +47,7 @@ const Product = () => {
         {product.images.map((image) => {
           return (
             <SwiperSlide key={image}>
-              <img src={image} />
+              <img src={image} alt={`{product.name}`} />
             </SwiperSlide>
           );
         })}
@@ -56,7 +55,6 @@ const Product = () => {
 
       <Swiper
         onSwiper={setThumbsSwiper}
-        loop={true}
         spaceBetween={10}
         slidesPerView={4}
         freeMode={true}
@@ -67,7 +65,7 @@ const Product = () => {
         {product.images.map((image) => {
           return (
             <SwiperSlide key={image}>
-              <img src={image} />
+              <img src={image} alt={`thumb for {product.name}`} />
             </SwiperSlide>
           );
         })}
@@ -75,15 +73,20 @@ const Product = () => {
     </>
   );
 
+  console.log('product:', product);
+  const { colors, sizes } = product;
+
   return (
-    <Container sx={{ py: 6 }} maxWidth="md">
-      <Typography variant="h5" align="left" sx={{ mb: 3 }}>
-        {product?.name}
-      </Typography>
-      {imageSection}
-      <Typography variant="p" align="left" whiteSpace="pre-line">
-        {product?.description}
-      </Typography>
+    <>
+      <Container sx={{ py: 6 }} maxWidth="md">
+        <Typography variant="h5" align="left" sx={{ mb: 3 }}>
+          {product?.name}
+        </Typography>
+        {imageSection}
+        <Typography variant="p" align="left" whiteSpace="pre-line">
+          {product?.description}
+        </Typography>
+      </Container>
 
       <button
         onClick={() => {
@@ -92,7 +95,7 @@ const Product = () => {
       >
         back
       </button>
-    </Container>
+    </>
   );
 };
 

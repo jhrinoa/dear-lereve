@@ -70,7 +70,7 @@ const ProductRegister = () => {
     const product = {
       id,
       name,
-      color,
+      colors,
       sizes,
       price,
       description,
