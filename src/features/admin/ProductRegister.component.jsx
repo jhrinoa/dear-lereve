@@ -1,11 +1,6 @@
 import { useState, useRef, useReducer } from 'react';
-import { storage, database } from '../../base';
+import { database } from '../../base';
 import { ref as dbRef, set } from 'firebase/database';
-import {
-  getDownloadURL,
-  ref as stgRef,
-  uploadBytesResumable,
-} from 'firebase/storage';
 import { nanoid } from 'nanoid';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -23,6 +18,7 @@ import MenuItem from '@mui/material/MenuItem';
 
 import Color from '../../components/Color.component';
 import SizeField from '../../components/SizeField.component';
+import ImagesUpload from './ImagesUpload.component';
 
 const CATEGERY = ['now', 'sale', 'baby', 'acc'];
 
@@ -45,7 +41,6 @@ const ProductRegister = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
-  const uploadImgRef = useRef();
   const forceUpdate = useReducer(() => ({}), {})[1];
 
   const resetForm = () => {
@@ -70,7 +65,7 @@ const ProductRegister = () => {
     const product = {
       id,
       name,
-      colors,
+      color,
       sizes,
       price,
       description,
@@ -98,43 +93,6 @@ const ProductRegister = () => {
       setLoading(false);
       setMessage(`Failed with an error: ${err}`);
     }
-  };
-
-  const formSubmitHandler = (e) => {
-    e.preventDefault();
-
-    if (!name) {
-      setMessage('Set name first');
-      return;
-    }
-
-    setImages([]);
-    const target = e.target[0];
-
-    for (let i = 0; i < target.files.length; i++) {
-      const file = target.files[i];
-
-      uploadFile(file, name);
-    }
-  };
-
-  const uploadFile = (file, prod_name) => {
-    if (!file) return;
-
-    const storageRef = stgRef(storage, `/${prod_name}/images/${file.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, file);
-
-    uploadTask.on(
-      'state_changed',
-      () => {},
-      (err) => console.error(err),
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-          uploadImgRef.current.value = '';
-          setImages((prevState) => [...prevState, url]);
-        });
-      }
-    );
   };
 
   const isNameInvalid = !!name.match(/[.|$|#|[|\]]/);
@@ -406,24 +364,12 @@ const ProductRegister = () => {
             padding: 1,
           }}
         >
-          <form onSubmit={formSubmitHandler}>
-            <input
-              accept="image/*"
-              multiple="multiple"
-              type="file"
-              ref={uploadImgRef}
-              onChange={() => {
-                forceUpdate();
-              }}
-            />
-            <Button
-              variant="contained"
-              type="submit"
-              disabled={!uploadImgRef.current?.value}
-            >
-              Upload
-            </Button>
-          </form>
+          <ImagesUpload
+            name={name}
+            onSuccess={setImages}
+            onError={setMessage}
+            onFileSelected={forceUpdate}
+          />
         </Box>
 
         <Box
