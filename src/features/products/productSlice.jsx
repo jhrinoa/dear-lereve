@@ -2,17 +2,17 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const slice = createSlice({
   name: 'ui',
-  initialState: { lastViewedProductName: '' },
+  initialState: { lastViewedProductId: '' },
   reducers: {
-    setLastViewedProductName: (state, { payload }) => {
-      state.lastViewedProductName = payload;
+    setLastViewedProductId: (state, { payload }) => {
+      state.lastViewedProductId = payload;
     },
   },
 });
 
-export const { setLastViewedProductName } = slice.actions;
+export const { setLastViewedProductId } = slice.actions;
 
 export default slice.reducer;
 
-export const selectLastViewedProductName = (state) =>
-  state.ui.lastViewedProductName;
+export const selectLastViewedProductId = (state) =>
+  state.ui.lastViewedProductId;

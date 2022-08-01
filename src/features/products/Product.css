@@ -1,0 +1,32 @@
+.main-img-container {
+  --swiper-navigation-color: '#fff';
+  --swiper-pagination-color: '#fff';
+  height: 300px;
+  width: 100%;
+}
+
+.main-img-container .swiper-slide img {
+  height: 100%;
+  margin: auto;
+  display: flex;
+  width: 90%;
+  object-fit: contain;
+}
+
+.thumb-swiper-container {
+  margin: 30px 0;
+  height: 100px;
+  width: 100%;
+}
+.thumb-swiper-container .swiper-slide {
+  opacity: 0.3;
+}
+
+.thumb-swiper-container .swiper-slide.swiper-slide-thumb-active {
+  opacity: 1;
+}
+
+.thumb-swiper-container .swiper-slide img {
+  width: 100%;
+  display: flex;
+}

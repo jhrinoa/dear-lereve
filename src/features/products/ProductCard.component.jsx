@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import { useDispatch } from 'react-redux';
-import { setLastViewedProductName } from './productSlice';
+import { setLastViewedProductId } from './productSlice';
 
 import { storage, database } from '../../base';
 import { ref, deleteObject } from 'firebase/storage';
@@ -41,8 +41,8 @@ const ProductCard = ({ product, isEditable, scrollTo }) => {
         }}
         ref={cardRef}
         onClick={() => {
-          dispatch(setLastViewedProductName(product.name));
-          navigate(`/product/${product.name}`);
+          dispatch(setLastViewedProductId(product.id));
+          navigate(`/product/${product.id}`);
         }}
       >
         <CardMedia
@@ -53,10 +53,10 @@ const ProductCard = ({ product, isEditable, scrollTo }) => {
         />
         <CardContent sx={{ flexGrow: 0 }}>
           <Grid container justifyContent="space-between" flexWrap="nowrap">
-            <Typography inline variant="h6" align="left" marginRight={1}>
+            <Typography variant="h6" align="left" marginRight={1}>
               {product.name}
             </Typography>
-            <Typography inline variant="p" align="right" margin="auto 0">
+            <Typography variant="p" align="right" margin="auto 0">
               {`$${product.price}`}
             </Typography>
           </Grid>

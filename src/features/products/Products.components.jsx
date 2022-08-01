@@ -15,7 +15,7 @@ import ProductCard from './ProductCard.component';
 import { useNavigationType, useParams } from 'react-router-dom';
 
 import { useSelector } from 'react-redux';
-import { selectLastViewedProductName } from './productSlice';
+import { selectLastViewedProductId } from './productSlice';
 
 const Products = () => {
   const { category } = useParams();
@@ -23,7 +23,7 @@ const Products = () => {
   const [products, setProducts] = useState([]);
   const { user } = useAuth();
   const navType = useNavigationType();
-  const lastViewedProductName = useSelector(selectLastViewedProductName);
+  const lastViewedProductId = useSelector(selectLastViewedProductId);
 
   useEffect(() => {
     const db = getDatabase();
@@ -50,9 +50,7 @@ const Products = () => {
             <ProductCard
               product={product}
               isEditable={!!user}
-              scrollTo={
-                navType === 'POP' && lastViewedProductName === product.name
-              }
+              scrollTo={navType === 'POP' && lastViewedProductId === product.id}
             />
           </Grid>
         ))}

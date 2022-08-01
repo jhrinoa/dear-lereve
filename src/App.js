@@ -24,7 +24,7 @@ function App() {
           <Route path=":category" element={<Products />} />
         </Route>
         <Route path="/product">
-          <Route path=":productName" element={<Product />} />
+          <Route path=":productId" element={<Product />} />
         </Route>
         <Route path="/login" element={<AdminLogin />} />
         <Route

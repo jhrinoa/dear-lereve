@@ -78,7 +78,6 @@ const ProductRegister = () => {
       mainImg: images[mainImg],
       labels,
       discountRate,
-      quantity,
     };
 
     setLoading(true);
