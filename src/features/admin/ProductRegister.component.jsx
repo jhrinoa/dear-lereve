@@ -1,4 +1,4 @@
-import { useState, useRef, useReducer } from 'react';
+import { useState, useReducer } from 'react';
 import { database } from '../../base';
 import { ref as dbRef, set } from 'firebase/database';
 import { nanoid } from 'nanoid';
@@ -16,8 +16,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 
-import Color from '../../components/Color.component';
-import SizeField from '../../components/SizeField.component';
+import QuantityField from '../../components/QuantityField.component';
 import ImagesUpload from './ImagesUpload.component';
 
 const CATEGERY = ['now', 'sale', 'baby', 'acc'];
@@ -27,15 +26,14 @@ const ProductRegister = () => {
   const [images, setImages] = useState([]);
   const [name, setName] = useState('');
   const [color, setColor] = useState('');
-  const [colors, setColors] = useState([]);
-  const [selectedColor, setSelectedColor] = useState('');
-  const [sizes, setSizes] = useState([]);
   const [price, setPrice] = useState('');
   const [description, setDescription] = useState('');
   const [labels, setLabels] = useState({});
   const [discountRate, setDiscountRate] = useState('');
-
   const [quantity, setQuantity] = useState('');
+
+  const [quantities, setQuantities] = useState([]);
+
   const [size, setSize] = useState('');
 
   const [loading, setLoading] = useState(false);
@@ -48,9 +46,6 @@ const ProductRegister = () => {
     setImages([]);
     setName('');
     setColor('');
-    setColors([]);
-    setSelectedColor('');
-    setSizes([]);
     setPrice('');
     setDescription('');
     setLabels({});
@@ -58,6 +53,7 @@ const ProductRegister = () => {
     setQuantity('');
     setSize('');
     setLoading(false);
+    setQuantities([]);
   };
 
   const createProduct = () => {
@@ -65,14 +61,13 @@ const ProductRegister = () => {
     const product = {
       id,
       name,
-      color,
-      sizes,
       price,
       description,
       images,
       mainImg,
       labels,
       discountRate,
+      quantities,
     };
 
     setLoading(true);
@@ -96,6 +91,15 @@ const ProductRegister = () => {
   };
 
   const isNameInvalid = !!name.match(/[.|$|#|[|\]]/);
+  const isQuantityAddValid = () => {
+    if (!color || !size || !quantity || parseInt(quantity) <= 0) {
+      return false;
+    }
+
+    return !quantities.some(
+      (q) => q.color === color && q.size === size && q.quantity === quantity
+    );
+  };
 
   return (
     <>
@@ -156,44 +160,80 @@ const ProductRegister = () => {
           <Box
             sx={{
               padding: 1,
+              mt: 2,
             }}
           >
-            <HexColorPicker color={color} onChange={setColor} />
-            <Typography sx={{ pt: 2 }}>Selected Colors: </Typography>
+            <FormControl
+              sx={{
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}
+            >
+              <HexColorPicker color={color} onChange={setColor} />
+              <TextField
+                label="Size"
+                variant="outlined"
+                value={size}
+                onChange={(e) => {
+                  setSize(e.target.value);
+                }}
+                sx={{ ml: 1 }}
+              />
+              <TextField
+                label="Quantity"
+                variant="outlined"
+                type="number"
+                value={quantity}
+                onChange={(e) => {
+                  setQuantity(e.target.value);
+                }}
+                inputProps={{
+                  step: 1,
+                  min: 0,
+                }}
+                sx={{ ml: 1 }}
+              />
+              <Button
+                disabled={!isQuantityAddValid()}
+                variant="contained"
+                onClick={() => {
+                  setQuantities((prevState) => [
+                    ...prevState,
+                    {
+                      color,
+                      size,
+                      quantity,
+                    },
+                  ]);
+                }}
+                sx={{ ml: 1 }}
+              >
+                Add
+              </Button>
+            </FormControl>
+            <Typography sx={{ pt: 2 }}>Quantities: </Typography>
             <section>
-              {colors.map((c) => (
-                <Color
-                  selected={c === selectedColor}
-                  key={c}
-                  colors={c}
-                  onClick={() => setSelectedColor(c)}
+              {quantities.map((q) => (
+                <QuantityField
+                  key={`${q.color}-${q.size}-${q.quantity}`}
+                  data={q}
+                  onDeleteClick={(deletingItem) => {
+                    setQuantities((prevState) =>
+                      prevState.filter(
+                        (s) =>
+                          !(
+                            s.color === deletingItem.color &&
+                            s.size === deletingItem.size &&
+                            s.quantity === deletingItem.quantity
+                          )
+                      )
+                    );
+                  }}
                 />
               ))}
             </section>
-
-            <Button
-              disabled={!color}
-              variant="contained"
-              onClick={() => {
-                if (colors.findIndex((col) => col === color) < 0) {
-                  setColors((prevState) => [...prevState, color]);
-                }
-              }}
-              sx={{ mt: 2 }}
-            >
-              Add Color
-            </Button>
-            <Button
-              variant="contained"
-              onClick={() => {
-                setColors((prevState) =>
-                  prevState.filter((col) => col !== selectedColor)
-                );
-              }}
-              sx={{ mt: 2, ml: 2 }}
-            >
-              Delete Color
-            </Button>
           </Box>
 
           <Box
@@ -246,80 +286,6 @@ const ProductRegister = () => {
                 max: 100,
               }}
             />
-          </Box>
-
-          <Box
-            sx={{
-              padding: 1,
-              mt: 2,
-            }}
-          >
-            <FormControl
-              sx={{
-                width: '100%',
-                display: 'flex',
-                flexDirection: 'row',
-              }}
-            >
-              <TextField
-                label="Size"
-                variant="outlined"
-                value={size}
-                onChange={(e) => {
-                  setSize(e.target.value);
-                }}
-              />
-              <TextField
-                label="Quantity"
-                variant="outlined"
-                type="number"
-                value={quantity}
-                onChange={(e) => {
-                  setQuantity(e.target.value);
-                }}
-                inputProps={{
-                  step: 1,
-                  min: 0,
-                }}
-                sx={{ ml: 1 }}
-              />
-
-              <Button
-                disabled={!size || !quantity || parseInt(quantity) <= 0}
-                variant="contained"
-                onClick={() => {
-                  setSizes((prevState) => [
-                    ...prevState,
-                    {
-                      size,
-                      quantity,
-                    },
-                  ]);
-                }}
-                sx={{ ml: 1 }}
-              >
-                Add Size
-              </Button>
-            </FormControl>
-            <Typography sx={{ pt: 2 }}>Sizes: </Typography>
-            <section>
-              {sizes.map((s) => (
-                <SizeField
-                  size={s}
-                  onDeleteClick={(deletingSize) => {
-                    setSizes((prevState) =>
-                      prevState.filter(
-                        (s) =>
-                          !(
-                            s.size === deletingSize.size &&
-                            s.quantity === deletingSize.quantity
-                          )
-                      )
-                    );
-                  }}
-                />
-              ))}
-            </section>
           </Box>
 
           <Box

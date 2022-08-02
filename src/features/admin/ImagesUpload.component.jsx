@@ -5,10 +5,11 @@ import {
   uploadBytesResumable,
 } from 'firebase/storage';
 import { storage } from '../../base';
-import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 const ImagesUpload = ({ name, onSuccess, onError, onFileSelected }) => {
   const uploadImgRef = useRef();
+  const [isLoading, setIsLoading] = useState(false);
 
   const uploadFile = (file, prod_name) => {
     if (!file) return;
@@ -46,6 +47,8 @@ const ImagesUpload = ({ name, onSuccess, onError, onFileSelected }) => {
     const promises = [];
     const images = [];
 
+    setIsLoading(true);
+
     for (let i = 0; i < target.files.length; i++) {
       const file = target.files[i];
       promises.push(
@@ -57,6 +60,7 @@ const ImagesUpload = ({ name, onSuccess, onError, onFileSelected }) => {
 
     Promise.all(promises).then(() => {
       onSuccess(images);
+      setIsLoading(false);
     });
   };
 
@@ -72,13 +76,14 @@ const ImagesUpload = ({ name, onSuccess, onError, onFileSelected }) => {
             onFileSelected();
           }}
         />
-        <Button
+        <LoadingButton
+          loading={isLoading}
           variant="contained"
           type="submit"
           disabled={!uploadImgRef.current?.value}
         >
           Upload
-        </Button>
+        </LoadingButton>
       </form>
     </>
   );

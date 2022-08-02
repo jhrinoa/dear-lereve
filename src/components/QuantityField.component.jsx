@@ -2,22 +2,23 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Color from './Color.component';
 
-const SizeField = ({ size, selected, onDeleteClick }) => {
+const QuantityField = ({ data, onDeleteClick }) => {
   const style = {
-    display: 'inline-block',
+    display: 'flex',
+    alignItems: 'center',
   };
-
-  if (selected) {
-    style.boxShadow = '0 0 0 4px';
-  }
 
   return (
     <Box sx={style}>
-      {`${size.size} (${size.quantity})`}
+      <Color color={data.color} />
+      <span
+        style={{ marginLeft: '20px' }}
+      >{`${data.size} (${data.quantity})`}</span>
       <IconButton
         onClick={() => {
-          onDeleteClick(size);
+          onDeleteClick(data);
         }}
       >
         <DeleteIcon sx={{ margin: 1 }} />
@@ -26,4 +27,4 @@ const SizeField = ({ size, selected, onDeleteClick }) => {
   );
 };
 
-export default SizeField;
+export default QuantityField;
