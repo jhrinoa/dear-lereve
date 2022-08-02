@@ -8,7 +8,6 @@ import { storage } from '../../base';
 import Button from '@mui/material/Button';
 
 const ImagesUpload = ({ name, onSuccess, onError, onFileSelected }) => {
-  const [images, setImages] = useState([]);
   const uploadImgRef = useRef();
 
   const uploadFile = (file, prod_name) => {
@@ -43,15 +42,15 @@ const ImagesUpload = ({ name, onSuccess, onError, onFileSelected }) => {
       return;
     }
 
-    setImages([]);
     const target = e.target[0];
     const promises = [];
+    const images = [];
 
     for (let i = 0; i < target.files.length; i++) {
       const file = target.files[i];
       promises.push(
         uploadFile(file, name).then((url) => {
-          setImages((prevState) => [...prevState, url]);
+          images[i] = url;
         })
       );
     }

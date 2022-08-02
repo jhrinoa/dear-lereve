@@ -33,48 +33,9 @@ const Product = () => {
     });
   }, [productId]);
 
-  const imageSection = !product ? (
-    <div>Loading</div>
-  ) : (
-    <>
-      <Swiper
-        spaceBetween={10}
-        navigation={true}
-        thumbs={{ swiper: thumbsSwiper }}
-        modules={[FreeMode, Navigation, Thumbs]}
-        className="main-img-container"
-      >
-        {product.images.map((image) => {
-          return (
-            <SwiperSlide key={image}>
-              <img src={image} alt={`{product.name}`} />
-            </SwiperSlide>
-          );
-        })}
-      </Swiper>
-
-      <Swiper
-        onSwiper={setThumbsSwiper}
-        spaceBetween={10}
-        slidesPerView={4}
-        freeMode={true}
-        watchSlidesProgress={true}
-        modules={[FreeMode, Navigation, Thumbs]}
-        className="thumb-swiper-container"
-      >
-        {product.images.map((image) => {
-          return (
-            <SwiperSlide key={image}>
-              <img src={image} alt={`thumb for {product.name}`} />
-            </SwiperSlide>
-          );
-        })}
-      </Swiper>
-    </>
-  );
-
-  console.log('product:', product);
-  const { colors, sizes } = product;
+  if (!product) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
@@ -82,7 +43,39 @@ const Product = () => {
         <Typography variant="h5" align="left" sx={{ mb: 3 }}>
           {product?.name}
         </Typography>
-        {imageSection}
+        <Swiper
+          spaceBetween={10}
+          navigation={true}
+          thumbs={{ swiper: thumbsSwiper }}
+          modules={[FreeMode, Navigation, Thumbs]}
+          className="main-img-container"
+        >
+          {product.images.map((image) => {
+            return (
+              <SwiperSlide key={image}>
+                <img src={image} alt={`{product.name}`} />
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
+
+        <Swiper
+          onSwiper={setThumbsSwiper}
+          spaceBetween={10}
+          slidesPerView={4}
+          freeMode={true}
+          watchSlidesProgress={true}
+          modules={[FreeMode, Navigation, Thumbs]}
+          className="thumb-swiper-container"
+        >
+          {product.images.map((image) => {
+            return (
+              <SwiperSlide key={image}>
+                <img src={image} alt={`thumb for {product.name}`} />
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
         <Typography variant="p" align="left" whiteSpace="pre-line">
           {product?.description}
         </Typography>

@@ -70,7 +70,7 @@ const ProductRegister = () => {
       price,
       description,
       images,
-      mainImg: images[mainImg],
+      mainImg,
       labels,
       discountRate,
     };
@@ -389,11 +389,11 @@ const ProductRegister = () => {
               }}
               key={imgUrl}
               onClick={() => {
-                setMainImg(index);
+                setMainImg(imgUrl);
               }}
             >
               <img src={imgUrl} alt={`img_${index} for ${name}`} width="200" />
-              <Checkbox checked={index === mainImg} />
+              <Checkbox checked={imgUrl === mainImg} />
             </div>
           ))}
         </Box>
