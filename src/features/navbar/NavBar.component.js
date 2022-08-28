@@ -11,6 +11,9 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import Link from '@mui/material/Link';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { useSelector } from 'react-redux';
+import { getTotal } from '../cart/cartSlice';
 
 const TITLE = 'Our Lereve';
 const pages = [
@@ -43,6 +46,7 @@ const pages = [
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const navigate = useNavigate();
+  const { totalQuantity } = useSelector(getTotal);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -131,6 +135,34 @@ const ResponsiveAppBar = () => {
               </Button>
             ))}
           </Box>
+          <IconButton
+            sx={{
+              color: 'white',
+            }}
+            onClick={() => {
+              navigate('/cart');
+            }}
+          >
+            <ShoppingCartIcon sx={{ margin: 1 }} />
+            {totalQuantity > 0 ? (
+              <p
+                style={{
+                  position: 'absolute',
+                  margin: 0,
+                  fontSize: 12,
+                  top: '20%',
+                  right: '20%',
+                  backgroundColor: 'red',
+                  borderRadius: '50%',
+                  height: 18,
+                  width: 18,
+                  lineHeight: '18px',
+                }}
+              >
+                {totalQuantity}
+              </p>
+            ) : null}
+          </IconButton>
         </Toolbar>
       </Container>
     </AppBar>

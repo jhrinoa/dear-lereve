@@ -9,6 +9,7 @@ import Product from './features/products/Product.component';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';
 import { PrivateRoute } from './utils/PrivateRoute';
+import Cart from './features/cart/Cart.component';
 
 const ProductRegister = React.lazy(() =>
   import('./features/admin/ProductRegister.component')
@@ -37,6 +38,7 @@ function App() {
             </PrivateRoute>
           }
         />
+        <Route path="/cart" element={<Cart />} />
       </Routes>
     </ThemeProvider>
   );

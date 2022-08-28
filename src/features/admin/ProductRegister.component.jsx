@@ -1,7 +1,7 @@
 import { useState, useReducer } from 'react';
 import { database } from '../../base';
 import { ref as dbRef, set } from 'firebase/database';
-import { nanoid } from 'nanoid';
+import { customAlphabet } from 'nanoid';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
@@ -17,6 +17,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 
 import QuantityField from '../../components/QuantityField.component';
+import ImageField from '../../components/ImageField.component';
 import ImagesUpload from './ImagesUpload.component';
 
 const CATEGERY = ['now', 'sale', 'baby', 'acc'];
@@ -56,7 +57,10 @@ const ProductRegister = () => {
     setQuantities([]);
   };
 
+  const ID_LENGTH = 10;
+
   const createProduct = () => {
+    const nanoid = customAlphabet('1234567890abcdef', ID_LENGTH);
     const id = nanoid();
     const product = {
       id,
@@ -341,26 +345,37 @@ const ProductRegister = () => {
         <Box
           sx={{
             padding: 1,
-            display: 'flex',
-            flexWrap: 'wrap',
           }}
         >
           {images.map((imgUrl, index) => (
-            <div
-              style={{
-                display: 'flex',
-                flexFlow: 'column',
-                margin: 10,
-                cursor: 'pointer',
+            <ImageField
+              imgUrl={imgUrl}
+              index={index}
+              onUp={() => {
+                if (index === 0) {
+                  return;
+                }
+                const newImages = [...images];
+                const prevImg = newImages[index - 1];
+                newImages[index - 1] = imgUrl;
+                newImages[index] = prevImg;
+                setImages(newImages);
               }}
-              key={imgUrl}
-              onClick={() => {
+              onDown={() => {
+                if (index === images.length - 1) {
+                  return;
+                }
+                const newImages = [...images];
+                const nextImg = newImages[index + 1];
+                newImages[index + 1] = imgUrl;
+                newImages[index] = nextImg;
+                setImages(newImages);
+              }}
+              onCheckboxClick={() => {
                 setMainImg(imgUrl);
               }}
-            >
-              <img src={imgUrl} alt={`img_${index} for ${name}`} width="200" />
-              <Checkbox checked={imgUrl === mainImg} />
-            </div>
+              checked={imgUrl === mainImg}
+            />
           ))}
         </Box>
 

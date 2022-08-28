@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Container } from '@mui/material';
 import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import { getDatabase, ref, query, get } from 'firebase/database';
 
@@ -12,9 +14,12 @@ import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 
 import './Product.css';
+import Stack from '@mui/material/Stack';
 
 // import required modules
 import { FreeMode, Navigation, Thumbs } from 'swiper';
+
+import SelectQuantityField from '../../components/SelectQuantityField.component';
 
 const Product = () => {
   const navigate = useNavigate();
@@ -39,13 +44,21 @@ const Product = () => {
 
   return (
     <>
-      <Container sx={{ py: 6 }} maxWidth="md">
-        <Typography variant="h5" align="left" sx={{ mb: 3 }}>
-          {product?.name}
-        </Typography>
+      <Container sx={{ pt: 2, pb: 6 }} maxWidth="md">
+        <Stack direction="row" alignItems="center" spacing={2}>
+          <IconButton
+            onClick={() => {
+              navigate(-1);
+            }}
+          >
+            <ArrowBackIcon sx={{ margin: 1 }} />
+          </IconButton>
+          <Typography variant="h5" align="left" sx={{ mb: 1 }}>
+            {product?.name}
+          </Typography>
+        </Stack>
         <Swiper
           spaceBetween={10}
-          navigation={true}
           thumbs={{ swiper: thumbsSwiper }}
           modules={[FreeMode, Navigation, Thumbs]}
           className="main-img-container"
@@ -79,15 +92,9 @@ const Product = () => {
         <Typography variant="p" align="left" whiteSpace="pre-line">
           {product?.description}
         </Typography>
-      </Container>
 
-      <button
-        onClick={() => {
-          navigate(-1);
-        }}
-      >
-        back
-      </button>
+        <SelectQuantityField data={product} />
+      </Container>
     </>
   );
 };
