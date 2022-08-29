@@ -39,7 +39,13 @@ const Product = () => {
   }, [productId]);
 
   if (!product) {
-    return <div>Loading...</div>;
+    return (
+      <Container sx={{ pt: 2, pb: 6 }} maxWidth="md">
+        <Typography variant="h5" align="center" sx={{ mt: 3 }}>
+          Loading...
+        </Typography>
+      </Container>
+    );
   }
 
   return (
@@ -93,7 +99,7 @@ const Product = () => {
           {product?.description}
         </Typography>
 
-        <SelectQuantityField data={product} />
+        <SelectQuantityField product={product} />
       </Container>
     </>
   );

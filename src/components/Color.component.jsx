@@ -1,10 +1,10 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 
-const Color = ({ color, selected, onClick }) => {
+const Color = ({ size = 30, color, selected, onClick }) => {
   const style = {
-    height: 30,
-    width: 30,
+    height: size,
+    width: size,
     backgroundColor: color,
     borderRadius: '50%',
     border: '1px solid black',

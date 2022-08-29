@@ -7,7 +7,8 @@ const cartSlice = createSlice({
   },
   reducers: {
     addToCart: (state, action) => {
-      const { id, selectedColor, selectedSize, mainImg, name } = action.payload;
+      const { product, selectedColor, selectedSize } = action.payload;
+      const { id } = product;
       const itemId = [id, selectedColor, selectedSize].join('/');
 
       const itemInCart = state.cart.find((item) => item.itemId === itemId);
@@ -18,10 +19,9 @@ const cartSlice = createSlice({
         state.cart.push({
           itemId,
           quantity: 1,
-          mainImg,
-          name,
           selectedColor,
           selectedSize,
+          product,
         });
       }
     },
@@ -31,8 +31,8 @@ const cartSlice = createSlice({
     },
     decrementQuantity: (state, action) => {
       const item = state.cart.find((item) => item.itemId === action.payload);
-      if (item.quantity === 1) {
-        item.quantity = 1;
+      if (item.quantity === 0) {
+        item.quantity = 0;
       } else {
         item.quantity--;
       }
@@ -61,7 +61,7 @@ export const getTotal = (state) => {
   let totalPrice = 0;
   state.cart.cart.forEach((item) => {
     totalQuantity += item.quantity;
-    totalPrice += item.price * item.quantity;
+    totalPrice += item.product.price * item.quantity;
   });
   return { totalPrice, totalQuantity };
 };

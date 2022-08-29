@@ -19,8 +19,8 @@ const getColorToSizeMap = (entries) => {
   return resultMap;
 };
 
-const SelectQuantityField = ({ data }) => {
-  const { quantities, id, mainImg, name } = data;
+const SelectQuantityField = ({ product }) => {
+  const { quantities } = product;
   const dispatch = useDispatch();
   const [selectedColor, setSelectedColor] = useState('');
   const [selectedSize, setSelectedSize] = useState('');
@@ -94,11 +94,9 @@ const SelectQuantityField = ({ data }) => {
         onClick={() => {
           dispatch(
             addToCart({
-              id,
               selectedColor,
               selectedSize,
-              mainImg,
-              name,
+              product,
             })
           );
         }}
