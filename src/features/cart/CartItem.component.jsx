@@ -34,7 +34,7 @@ const CartItem = ({ itemId, color, size, quantity, product }) => {
               fontWeight: 600,
             }}
           >
-            sdjcksldcjsidcjsdilcjsd sidjc lsijc sldicj sdc
+            {name}
           </Typography>
 
           <Box
@@ -78,7 +78,7 @@ const CartItem = ({ itemId, color, size, quantity, product }) => {
         </Box>
         <Box sx={{ ml: 2 }}>
           <Typography variant="h6" align="center">
-            {`\$${totalPrice}`}
+            {`$${totalPrice}`}
           </Typography>
         </Box>
       </Stack>

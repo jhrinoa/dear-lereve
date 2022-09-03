@@ -8,11 +8,14 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Stack from '@mui/material/Stack';
 import { Container } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { getTotal } from './cartSlice';
+import Button from '@mui/material/Button';
 
 const Cart = () => {
   const navigate = useNavigate();
   const cart = useSelector((state) => state.cart.cart);
   const dispatch = useDispatch();
+  const { totalPrice } = useSelector(getTotal);
 
   let content;
 
@@ -50,13 +53,38 @@ const Cart = () => {
         </Typography>
       </Stack>
       {content}
-      <button
-        onClick={() => {
-          dispatch(clearCart());
-        }}
-      >
-        clear cart
-      </button>
+      <Container sx={{ py: 3 }}>
+        <Stack direction="row">
+          <Typography variant="h6" align="left" sx={{ flex: 1 }}>
+            Total price
+          </Typography>
+          <Typography variant="h5" align="left">
+            {`$${totalPrice}`}
+          </Typography>
+        </Stack>
+      </Container>
+
+      <Stack direction="row">
+        <Button
+          onClick={() => {
+            dispatch(clearCart());
+          }}
+          size="small"
+        >
+          clear cart
+        </Button>
+        <div style={{ flex: 1 }}></div>
+        <Button
+          disabled={totalPrice <= 0}
+          variant="contained"
+          onClick={() => {
+            dispatch(clearCart());
+          }}
+          size="small"
+        >
+          Checkout
+        </Button>
+      </Stack>
     </Container>
   );
 };

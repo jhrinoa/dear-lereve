@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Container } from '@mui/material';
+import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -19,13 +20,21 @@ import Stack from '@mui/material/Stack';
 // import required modules
 import { FreeMode, Navigation, Thumbs } from 'swiper';
 
-import SelectQuantityField from '../../components/SelectQuantityField.component';
+import SelectQuantityField from './SelectQuantityField.component';
+
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
+const Alert = React.forwardRef(function Alert(props, alertRef) {
+  return <MuiAlert elevation={6} ref={alertRef} variant="filled" {...props} />;
+});
 
 const Product = () => {
   const navigate = useNavigate();
   const { productId } = useParams();
 
   const [product, setProduct] = useState();
+  const [alertOpen, setAlertOpen] = useState(false);
 
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
@@ -47,6 +56,14 @@ const Product = () => {
       </Container>
     );
   }
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setAlertOpen(false);
+  };
 
   return (
     <>
@@ -99,7 +116,35 @@ const Product = () => {
           {product?.description}
         </Typography>
 
-        <SelectQuantityField product={product} />
+        <SelectQuantityField
+          product={product}
+          onAddCart={() => {
+            setAlertOpen(true);
+          }}
+        />
+        <Snackbar
+          onClose={handleClose}
+          open={alertOpen}
+          autoHideDuration={4000}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        >
+          <Alert
+            onClose={handleClose}
+            severity="success"
+            sx={{ width: '100%' }}
+            action={
+              <Button
+                size="small"
+                color="tertiary"
+                onClick={() => navigate('/cart')}
+              >
+                View Cart
+              </Button>
+            }
+          >
+            {'Item added to your cart'}
+          </Alert>
+        </Snackbar>
       </Container>
     </>
   );

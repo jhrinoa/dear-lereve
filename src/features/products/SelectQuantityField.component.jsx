@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Color from './Color.component';
+import Color from '../../components/Color.component';
 import Typography from '@mui/material/Typography';
 import { useDispatch } from 'react-redux';
-import { addToCart } from '../features/cart/cartSlice';
+import { addToCart } from '../cart/cartSlice';
 
 const getColorToSizeMap = (entries) => {
   const resultMap = {};
@@ -19,7 +19,7 @@ const getColorToSizeMap = (entries) => {
   return resultMap;
 };
 
-const SelectQuantityField = ({ product }) => {
+const SelectQuantityField = ({ product, onAddCart }) => {
   const { quantities } = product;
   const dispatch = useDispatch();
   const [selectedColor, setSelectedColor] = useState('');
@@ -99,6 +99,7 @@ const SelectQuantityField = ({ product }) => {
               product,
             })
           );
+          onAddCart();
         }}
         sx={{ my: 3 }}
       >
