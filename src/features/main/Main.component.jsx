@@ -5,12 +5,13 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 import Products from '../../features/products/Products.components';
+import './Main.css';
 
 function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://google.com/">
+      <Link color="inherit" href="http://ourlereve.shop/">
         Our Lereve
       </Link>
       {'.'}
@@ -26,51 +27,20 @@ export default function Main() {
       <main>
         <Box
           sx={{
-            bgcolor: 'background.paper',
             pt: 8,
+            height: 500
           }}
+          className="jlee-banner"
         >
-          <Container maxWidth="sm">
-            <Typography
-              component="h1"
-              variant="h2"
-              align="center"
-              color="text.primary"
-              gutterBottom
-            >
-              Our Lereve
-            </Typography>
-            <Typography
-              variant="h5"
-              align="center"
-              color="text.secondary"
-              paragraph
-            >
-              패션을 창조하는 아워르레브
-            </Typography>
-          </Container>
         </Box>
         <Container sx={{ pb: 4 }} maxWidth="md">
           <Products url="all"></Products>
-          {/* End hero unit */}
         </Container>
       </main>
       {/* Footer */}
-      <Box sx={{ bgcolor: 'background.paper', p: 6 }} component="footer">
-        <Typography variant="h6" align="center" gutterBottom>
-          Footer
-        </Typography>
-        <Typography
-          variant="subtitle1"
-          align="center"
-          color="text.secondary"
-          component="p"
-        >
-          Something here to give the footer a purpose!
-        </Typography>
+      <Box sx={{ p: 6 }} component="footer">
         <Copyright />
       </Box>
-      {/* End footer */}
     </>
   );
 }
