@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "dear-lereve"
-  }
+    "default": "dear-lereve",
+    "prod": "dear-lereve-539de"
+  },
+  "targets": {},
+  "etags": {}
 }

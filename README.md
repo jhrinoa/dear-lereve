@@ -72,4 +72,16 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 ### TODOs
 
 1. use smaller size pictures for thumbnails
-2.
+
+
+Make sure firebase-tools is installed.
+`npm install -g firebase-tools`
+
+Login
+`firebase login`
+
+Use project
+`firebase use --add` (--add might not be necessary)
+
+Deploy
+`firebase deploy`
