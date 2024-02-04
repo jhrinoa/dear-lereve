@@ -78,7 +78,7 @@ const Cart = () => {
           disabled={totalPrice <= 0}
           variant="contained"
           onClick={() => {
-            dispatch(clearCart());
+            navigate('/checkout');
           }}
           size="small"
         >
